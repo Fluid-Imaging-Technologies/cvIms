@@ -22,7 +22,8 @@ IplImage* binarize_image();
 void find_contours(IplImage *binImg);
 
 //char project_dir[] = "C:\\Users\\scott\\My Documents\\FluidData\\ShapeGenBW\\Circles_3\\";
-char project_dir[MAX_PATH] = "/home/scott/FluidData/ShapeGenBW/Fixed_Ellipse_1/";
+char project_dir[] = "C:\\Users\\scott\\My Documents\\Data\\TwoCam\\raw\\camera2\\";
+//char project_dir[MAX_PATH] = "/home/scott/FluidData/ShapeGenBW/Fixed_Ellipse_1/";
 
 CvMemStorage *mem;
 
@@ -94,7 +95,7 @@ void draw_bounding_rect(IplImage *img, CvContour *seq)
 
 void find_contours(IplImage *binImg)
 {
-	int i;
+	int i, key;
 	IplImage *contourImg;
 	CvSeq *seq;
 	CvContourScanner scanner;
@@ -129,7 +130,11 @@ void find_contours(IplImage *binImg)
 		draw_bounding_rect(contourImg, (CvContour *)seq);
 
 		cvShowImage("contours", contourImg);
-		cvWaitKey(0);
+
+		// break if user hits ESC key
+		key = 0xff & cvWaitKey(0);
+		if (key == 27)
+			break;
 
 		seq = cvFindNextContour(scanner);
 		i++;
@@ -152,7 +157,7 @@ IplImage* binarize_image()
 	calImg = cvLoadImage(buff, CV_LOAD_IMAGE_GRAYSCALE);
 
 	strcpy(buff, project_dir);
-	strcat(buff, "rawfile_000106.tif");
+	strcat(buff, "rawfile_000060.tif");
 	rawImg = cvLoadImage(buff, CV_LOAD_IMAGE_GRAYSCALE);
 
 	maskedImg = cvCreateImage(cvGetSize(rawImg), rawImg->depth, 1);
